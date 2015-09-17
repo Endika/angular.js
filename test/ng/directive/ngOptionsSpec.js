@@ -2013,7 +2013,7 @@ describe('ngOptions', function() {
     });
 
 
-    it('should support biding via ngBind attribute', function() {
+    it('should support binding via ngBind attribute', function() {
       var option;
       createSingleSelect('<option value="" ng-bind="blankVal"></option>');
 
@@ -2027,6 +2027,20 @@ describe('ngOptions', function() {
       option = element.find('option').eq(0);
       expect(option.val()).toBe('');
       expect(option.text()).toBe('is blank');
+    });
+
+    it('should support option without a value attribute', function() {
+      createSingleSelect('<option>--select--</option>');
+      scope.$apply(function() {
+        scope.values = [{name: 'A'}, {name: 'B'}, {name: 'C'}];
+      });
+
+      var options = element.find('option');
+
+      expect(options.eq(0)).toEqualUnknownOption();
+      expect(options.eq(1)).toEqualOption(scope.values[0], 'A');
+      expect(options.eq(2)).toEqualOption(scope.values[1], 'B');
+      expect(options.eq(3)).toEqualOption(scope.values[2], 'C');
     });
 
 
